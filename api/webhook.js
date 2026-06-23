@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       return res.status(200).send(challenge);
     }
 
-    return res.sendStatus(403);
+    return res.status(403).end();
   }
 
   // ───── RECEIVE EVENTS ─────
@@ -51,5 +51,5 @@ export default async function handler(req, res) {
     }
   }
 
-  return res.sendStatus(405);
+  return res.status(405).end();
 }
