@@ -2,6 +2,12 @@ import { ENV } from "../config/env.js";
 import { getResponse } from "../lib/keywords.js";
 import { sendMessage } from "../lib/facebook.js";
 
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
 export default async function handler(req, res) {
 
   // ───── VERIFY WEBHOOK ─────
@@ -10,7 +16,7 @@ export default async function handler(req, res) {
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
 
-    if (mode && token === ENV.VERIFY_TOKEN) {
+    if (mode === "subscribe" && token === ENV.VERIFY_TOKEN) {
       return res.status(200).send(challenge);
     }
 
@@ -19,14 +25,14 @@ export default async function handler(req, res) {
 
   // ───── RECEIVE EVENTS ─────
   if (req.method === "POST") {
-    const body = req.body;
-
     try {
-      for (const entry of body.entry || []) {
-        for (const change of entry.changes || []) {
+      const body = req.body;
 
-          const message = change.value.message;
-          const userId = change.value.from?.id;
+      for (const entry of body.entry || []) {
+        for (const event of entry.messaging || []) {
+
+          const userId = event.sender?.id;
+          const message = event.message?.text;
 
           if (!message || !userId) continue;
 
