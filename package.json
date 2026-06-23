@@ -1,6 +1,9 @@
 {
-  "name": "facebook-auto-bot",
+  "name": "facebook-bot",
   "version": "1.0.0",
   "type": "module",
-  "dependencies": {}
+  "main": "api/webhook.js",
+  "engines": {
+    "node": "20.x"
+  }
 }
